@@ -1,0 +1,22 @@
+# Android Studio / Gradle
+.gradle/
+build/
+.kotlin/
+.idea/
+*.iml
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Spring Boot / Maven
+target/
+# Base de datos H2 local (se crea sola al iniciar el microservicio)
+ms-solicitudes/data/
+
+# Contraseñas de la firma del APK (nunca se suben)
+keystore.properties
+
+# Sistema
+.DS_Store
+Thumbs.db
