@@ -16,8 +16,8 @@ Todos los datos son **ficticios** (solicitudes, fotos y usuario de prueba).
 
 | Integrante | Tareas |
 |---|---|
-| Bastian Alarcon | Microservicio `ms-solicitudes` (Spring Boot + H2), estructura MVVM de la app, integración con el microservicio (Retrofit, CRUD), consumo de la API externa |
-| Ignacio Hidalgo | Pruebas unitarias (Kotest + MockK), firma del APK (`.jks`), README y planificación en Trello |
+| Bastian Alarcon | Microservicio `ms-solicitudes` (Spring Boot + H2), estructura MVVM de la app, integración con el microservicio (Retrofit, CRUD), consumo de la API externa, firma del APK (`.jks`) |
+| Ignacio Hidalgo | Pruebas unitarias (Kotest + MockK), configuración de la firma (`keystore.properties.example`), README y planificación en Trello |
 
 Planificación en Trello: https://trello.com/b/gEZQVUK8/dsy1105-app-solicitudes-ev-parcial-4
 
@@ -122,12 +122,40 @@ Resultado: **29 pruebas OK**. Cobertura: **97 %** en `viewmodel` y **100 %** en 
 
 Cómo se generó:
 
-1. Android Studio → *Build → Generate Signed App Bundle or APK → APK*.
-2. *Create new…* → guardar la llave en `app-movil/keystore/solicitudes.jks`, alias
-   `solicitudes`, con claves y datos del certificado.
-3. Elegir la variante **release** → *Create*. El APK queda en `app-movil/app/release/`.
+1. Se creó la llave con `keytool` (RSA 2048, válida por 10 000 días), dentro de `app-movil`:
 
-_(Capturas del APK firmado y del `.jks`: agregar aquí)_
+   ```bash
+   keytool -genkeypair -keystore keystore/solicitudes.jks -alias solicitudes -keyalg RSA -keysize 2048 -validity 10000
+   ```
+
+2. Se copió `keystore.properties.example` a `keystore.properties` y se escribieron las claves.
+3. Se generó el APK firmado con la variante **release** (usa el `signingConfigs` del
+   `build.gradle.kts`):
+
+   ```bash
+   ./gradlew assembleRelease
+   ```
+
+   El APK sale en `app/build/outputs/apk/release/` y se copió a `app/release/app-release.apk`.
+
+En Android Studio se obtiene lo mismo con *Build → Generate Signed App Bundle or APK → APK*,
+eligiendo la llave `keystore/solicitudes.jks`, el alias `solicitudes` y la variante **release**.
+
+### Evidencia de la firma
+
+Verificación del APK con `apksigner` (Android SDK build-tools):
+
+```text
+> apksigner verify --verbose --print-certs app/release/app-release.apk
+Verifies
+Verified using v2 scheme (APK Signature Scheme v2): true
+Number of signers: 1
+Signer #1 certificate DN: CN=AppSolicitudes Grupo8, OU=DSY1105, O=Duoc UC, L=Santiago, C=CL
+Signer #1 certificate SHA-256 digest: 8fbe043d18146bc4cd7f918cee52ee09c44a0852ebc9de0bf8d5b14a8a953c32
+```
+
+Los datos del certificado (`CN=AppSolicitudes Grupo8, OU=DSY1105…`) son los mismos de la llave
+`solicitudes.jks`, así que el APK quedó firmado con ella.
 
 ## Estructura
 
