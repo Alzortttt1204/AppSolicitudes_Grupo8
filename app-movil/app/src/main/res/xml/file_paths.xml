@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Carpeta privada donde se guardan las fotos de evidencia -->
+<paths>
+    <files-path
+        name="evidencias"
+        path="evidencias/" />
+</paths>
