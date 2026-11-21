@@ -141,6 +141,19 @@ Cómo se generó:
 En Android Studio se obtiene lo mismo con *Build → Generate Signed App Bundle or APK → APK*,
 eligiendo la llave `keystore/solicitudes.jks`, el alias `solicitudes` y la variante **release**.
 
+### Capturas
+
+**Llave `.jks`** (`keystore/solicitudes.jks`, vista con `keytool -list -v`):
+
+![Llave solicitudes.jks](docs/captura_jks.png)
+
+**APK firmado** (`app/release/app-release.apk`, verificado con `apksigner`):
+
+![APK firmado verificado con apksigner](docs/captura_apk_firmado.png)
+
+La huella SHA-256 de la llave (`8F:BE:04:3D…`) es la misma del certificado con que se firmó el
+APK (`8fbe043d…`).
+
 ### Evidencia de la firma
 
 Verificación del APK con `apksigner` (Android SDK build-tools):
